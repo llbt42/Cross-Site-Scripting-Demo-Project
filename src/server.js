@@ -15,7 +15,7 @@ function send(res, status, body, type = "text/html; charset=utf-8") {
     res.end(body);
 }
 
-// Demonstration helper: encodes characters that have meaning in HTML text context.
+// Encoding für Zeichen mit Bedeutung im HTML-Kontext
 function escapeHtml(value) {
     return String(value).replace(/[&<>"']/g, (char) => ({
         "&": "&amp;",
@@ -62,13 +62,13 @@ const server = http.createServer(async (req, res) => {
 
         if (req.method === "GET" && await serveStatic(url.pathname, res)) return;
 
-        if (req.method === "GET" && url.pathname === "/pages/reflected.html") {
+        if (req.method === "GET" && url.pathname === "/reflected") {
             const name = url.searchParams.get("name") || "Besucher";
             const mode = url.searchParams.get("mode") === "safe" ? "safe" : "unsafe";
             const output = mode === "safe" ? escapeHtml(name) : name;
             const warning = mode === "safe"
-                ? "Sichere Variante: Der Parameter wird für den HTML-Textkontext kodiert."
-                : "Unsichere Variante: Der Parameter wird ungeprüft in HTML eingesetzt.";
+                ? "Sichere Variante: Der URL-Parameter wird für den HTML-Textkontext kodiert."
+                : "Unsichere Variante: Der URL-Parameter wird ungeprüft in HTML eingesetzt.";
 
             // INTENTIONALLY VULNERABLE when mode=unsafe. Use only on localhost.
             send(res, 200, `<!doctype html>
