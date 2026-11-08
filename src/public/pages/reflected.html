@@ -1,0 +1,64 @@
+
+<!doctype html>
+<html lang="de">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Reflected XSS – XSS Playground</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<main class="container narrow">
+    <a class="back" href="/">← Zurück zum Playground</a>
+
+    <section class="panel">
+        <p class="eyebrow">DEMO 01 · REFLECTED XSS</p>
+
+        <h1>Reflected XSS – URL-Parameter</h1>
+
+        <p>
+            Bei Reflected XSS übernimmt der Server einen Wert aus
+            einer Anfrage und gibt ihn unmittelbar in seiner
+            HTML-Antwort zurück.
+        </p>
+
+        <!-- DIE BEGRÜSSUNG WIRD VOM SERVER EINGESETZT -->
+        <div id="reflected-result">
+            {{RESULT}}
+        </div>
+
+        <h2>Aufgabe</h2>
+
+        <p>
+            Versuche, den URL-Parameter <code>name</code> zu manipulieren.
+            Gib statt eines normalen Namens beispielsweise
+            <code>&lt;script&gt;alert('XSS funktioniert!')&lt;/script&gt;</code>
+            ein.
+        </p>
+
+        <div class="actions">
+            <a class="button"
+               href="/pages/reflected.html?name=Max&amp;mode=unsafe">
+                Unsichere Variante testen
+            </a>
+
+            <a class="button secondary"
+               href="/pages/reflected.html?name=Max&amp;mode=safe">
+                Sichere Variante testen
+            </a>
+        </div>
+    </section>
+
+    <section class="panel">
+        <h2>Wie funktioniert die sichere Variante?</h2>
+
+        <p>
+            Bei der sicheren Variante werden HTML-Sonderzeichen
+            durch ihre HTML-Entsprechungen ersetzt.
+            Der Browser zeigt den eingeschleusten Inhalt dadurch
+            als Text an, statt ihn als HTML zu interpretieren.
+        </p>
+    </section>
+</main>
+</body>
+</html>

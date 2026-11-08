@@ -40,7 +40,10 @@ async function serveStatic(pathname, res) {
         "/": "index.html",
         "/index.html": "index.html",
         "/style.css": "style.css",
-        "/app.js": "app.js"
+        "/app.js": "app.js",
+        "/pages/reflected.html": "pages/reflected.html",
+        "/pages/stored.html": "pages/stored.html",
+        "/pages/dom.html": "pages/dom.html",
     };
     const filename = routes[pathname];
     if (!filename) return false;
@@ -56,33 +59,45 @@ async function serveStatic(pathname, res) {
     return true;
 }
 
+async function serveReflected(url, res) {
+    const name = url.searchParams.get("name") || "Besucher";
+    const mode = url.searchParams.get("mode") === "safe"
+        ? "safe"
+        : "unsafe";
+
+    const template = await fs.readFile(
+        path.join(PUBLIC_DIR, "pages", "reflected.html"),
+        "utf8"
+    );
+
+    const output = mode === "safe"
+        ? escapeHtml(name)
+        : name;
+
+    const warning = mode === "safe"
+        ? "Sichere Variante: Der Parameter wird für den HTML-Textkontext kodiert."
+        : "Unsichere Variante: Der Parameter wird ungeprüft in HTML eingesetzt.";
+
+    const result = `
+        <h2>Hallo, ${output}!</h2>
+        <p class="notice ${mode === "safe" ? "good" : "bad"}">
+            ${warning}
+        </p>
+    `;
+
+    const html = template.replace("{{RESULT}}", result);
+
+    send(res, 200, html);
+}
+
 const server = http.createServer(async (req, res) => {
     try {
         const url = new URL(req.url, `http://${req.headers.host || "localhost"}`);
 
         if (req.method === "GET" && await serveStatic(url.pathname, res)) return;
 
-        if (req.method === "GET" && url.pathname === "/reflected") {
-            const name = url.searchParams.get("name") || "Besucher";
-            const mode = url.searchParams.get("mode") === "safe" ? "safe" : "unsafe";
-            const output = mode === "safe" ? escapeHtml(name) : name;
-            const warning = mode === "safe"
-                ? "Sichere Variante: Der URL-Parameter wird für den HTML-Textkontext kodiert."
-                : "Unsichere Variante: Der URL-Parameter wird ungeprüft in HTML eingesetzt.";
-
-            // INTENTIONALLY VULNERABLE when mode=unsafe. Use only on localhost.
-            send(res, 200, `<!doctype html>
-<html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Reflected XSS – XSS Playground</title><link rel="stylesheet" href="/style.css"></head>
-<body><main class="container narrow">
-<a class="back" href="/">← Zurück zum Playground</a>
-<p class="eyebrow">DEMO 01 · REFLECTED XSS</p><h1>Hallo, ${output}!</h1>
-<p class="notice ${mode === "safe" ? "good" : "bad"}">${warning}</p>
-<p>Der Wert stammt aus dem URL-Parameter <code>name</code>. Vergleiche die beiden Varianten:</p>
-<div class="actions"><a class="button" href="/reflected?name=Max&mode=unsafe">Unsicher testen</a>
-<a class="button secondary" href="/reflected?name=Max&mode=safe">Sicher testen</a></div>
-<p class="muted">Hinweis: Die unsichere Route ist absichtlich verwundbar und ausschließlich für diese lokale Übung gedacht.</p>
-</main></body></html>`);
+        if (req.method === "GET" && url.pathname === "/pages/reflected.html") {
+            await serveReflected(url, res);
             return;
         }
 

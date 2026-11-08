@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="de">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>DOM-based XSS – XSS Playground</title>
+    <link rel="stylesheet" href="/style.css">
+    <script src="/app.js" defer></script>
+</head>
+<body>
+<main class="container">
+    <a class="back" href="/">← Zurück zum Playground</a>
+
+    <section class="panel">
+        <div class="section-heading">
+            <div>
+                <p class="eyebrow">DEMO 03</p>
+                <h1>DOM-based XSS – URL-Fragment</h1>
+            </div>
+            <span class="tag">Clientseitig</span>
+        </div>
+
+        <p>
+            Bei DOM-based XSS verarbeitet JavaScript im Browser
+            nicht vertrauenswürdige Daten und fügt sie unsicher in
+            die Webseite ein.
+        </p>
+
+        <h2>Aufgabe</h2>
+        <p>
+            Lade beide Beispiele und vergleiche, wie der Browser
+            den Inhalt verarbeitet.
+        </p>
+
+        <div class="actions">
+            <button id="dom-unsafe">Unsicheres Beispiel laden</button>
+            <button id="dom-safe" class="button secondary">
+                Sicheres Beispiel laden
+            </button>
+        </div>
+
+        <div class="mode-row">
+            <span>Aktueller Modus:</span>
+            <strong id="dom-mode">Noch kein Beispiel geladen</strong>
+        </div>
+
+        <div id="dom-output" class="output-box">
+            Hier erscheint die Vorschau.
+        </div>
+
+        <p class="muted">
+            Test-Payload:
+            <code>&lt;img src=x onerror=alert('DOM XSS')&gt;</code>
+        </p>
+    </section>
+
+    <section class="panel">
+        <h2>Wie funktioniert die sichere Variante?</h2>
+        <p>
+            Statt <code>innerHTML</code> wird <code>textContent</code>
+            verwendet. Dadurch behandelt der Browser den Inhalt
+            als Text und nicht als HTML-Struktur.
+        </p>
+    </section>
+
+    <footer>
+        Lokales Lernprojekt · XSS Demo-Projekt · Keine produktive Anwendung
+    </footer>
+</main>
+</body>
+</html>

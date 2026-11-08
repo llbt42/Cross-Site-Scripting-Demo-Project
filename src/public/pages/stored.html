@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="de">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Stored XSS – XSS Playground</title>
+    <link rel="stylesheet" href="/style.css">
+    <script src="/app.js" defer></script>
+</head>
+<body>
+<main class="container">
+    <a class="back" href="/">← Zurück zum Playground</a>
+
+    <section class="panel">
+        <div class="section-heading">
+            <div>
+                <p class="eyebrow">DEMO 02</p>
+                <h1>Stored XSS – Kommentarfunktion</h1>
+            </div>
+            <span class="tag">Server-Speicherung</span>
+        </div>
+
+        <p>
+            Bei Stored XSS wird schädlicher Inhalt dauerhaft gespeichert
+            und später anderen Benutzern angezeigt.
+        </p>
+
+        <h2>Aufgabe</h2>
+        <p>
+            Schreibe einen Kommentar und speichere ihn.
+            Vergleiche anschließend die unsichere und sichere Darstellung.
+        </p>
+
+        <label for="comment">Dein Kommentar</label>
+        <textarea id="comment" rows="3" maxlength="500"
+                  placeholder="Schreibe einen Kommentar …"></textarea>
+
+        <div class="actions">
+            <button id="add-comment">Kommentar speichern</button>
+            <button id="clear-comments" class="button secondary">
+                Alle Kommentare löschen
+            </button>
+        </div>
+
+        <div class="mode-row">
+            <span>Ausgabemethode:</span>
+            <label class="radio">
+                <input type="radio" name="stored-mode" value="unsafe" checked>
+                Unsicher (innerHTML)
+            </label>
+            <label class="radio">
+                <input type="radio" name="stored-mode" value="safe">
+                Sicher (textContent)
+            </label>
+        </div>
+
+        <div id="comments" class="comments" aria-live="polite"></div>
+
+        <p class="muted">
+            Testidee:
+            Speichere
+            <code>&lt;img src=x onerror=alert('Stored XSS')&gt;</code>
+            und vergleiche anschließend beide Ausgabemethoden.
+        </p>
+    </section>
+
+    <section class="panel">
+        <h2>Wie funktioniert die sichere Variante?</h2>
+        <p>
+            Bei der sicheren Variante wird der Kommentar mit
+            <code>textContent</code> als reiner Text eingefügt.
+            Der Browser interpretiert den Inhalt dadurch nicht als HTML
+            und führt eingeschleusten JavaScript-Code nicht aus.
+        </p>
+    </section>
+
+    <footer>
+        Lokales Lernprojekt · XSS Demo-Projekt · Keine produktive Anwendung
+    </footer>
+</main>
+</body>
+</html>

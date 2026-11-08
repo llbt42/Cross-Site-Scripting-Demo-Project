@@ -52,3 +52,90 @@ code { color: #bae6fd; background: #0b1324; border-radius: 5px; padding: 2px 5px
 .bad { border-color: #991b1b; background: #450a0a; color: var(--danger); }
 footer { padding: 30px 0 50px; color: var(--muted); text-align: center; font-size: .85rem; }
 @media (max-width: 760px) { .intro-grid { grid-template-columns: 1fr; } .section-heading { display: block; } .tag { display: inline-block; margin: 5px 0 12px; } }
+
+
+/* =================================
+   Einheitliches Demo-Seitenlayout
+================================= */
+
+.back {
+  display: inline-block;
+  margin-bottom: 24px;
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.back:hover {
+  text-decoration: underline;
+}
+
+.demo-header {
+  margin-bottom: 24px;
+}
+
+.demo-header h1 {
+  margin-top: 8px;
+  margin-bottom: 12px;
+}
+
+.demo-number {
+  display: inline-block;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+}
+
+.demo-description {
+  max-width: 750px;
+  line-height: 1.7;
+}
+
+.demo-section {
+  margin-top: 24px;
+}
+
+.demo-section h2 {
+  margin-top: 0;
+}
+
+.demo-task {
+  padding: 16px;
+  border-radius: 12px;
+  background: var(--surface);
+  margin-top: 16px;
+}
+
+.demo-result {
+  padding: 18px;
+  margin-top: 16px;
+  border: 1px solid;
+  border-radius: 12px;
+  overflow-wrap: anywhere;
+}
+
+.demo-result code {
+  overflow-wrap: anywhere;
+}
+
+.demo-info {
+  margin-top: 20px;
+  padding: 16px;
+  border-left: 4px solid var(--accent);
+  background: var(--surface);
+  border-radius: 8px;
+  line-height: 1.6;
+}
+
+.danger-button {
+  background: #991b1b;
+  color: white;
+  border: 1px solid #b91c1c;
+}
+
+.danger-button:hover {
+  background: #b91c1c;
+  filter: brightness(1.1);
+}
+
