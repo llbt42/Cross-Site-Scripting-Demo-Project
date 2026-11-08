@@ -1,0 +1,15 @@
+services:
+  xss-demo-project:
+    build: .
+    container_name: xss-demo-project
+    ports:
+      - "127.0.0.1:8080:3000"
+    volumes:
+      - xss-data:/app/data
+    environment:
+      - PORT=3000
+      - DATA_FILE=/app/data/comments.json
+    restart: unless-stopped
+
+volumes:
+  xss-data:

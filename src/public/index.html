@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>XSS Demo-Projekt</title>
+  <link rel="stylesheet" href="/style.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <header class="hero">
+    <div class="container">
+      <p class="eyebrow">LERNPROJEKT</p>
+      <h1>XSS <span>Playground</span></h1>
+      <p class="lead">Drei typische Cross-Site-Scripting-Szenarien verstehen – und direkt vergleichen, wie sichere Ausgabe funktioniert.</p>
+      <p class="warning"><strong>Nur lokal verwenden:</strong> Dieses Projekt enthält absichtlich verwundbare Demonstrationen. Nicht öffentlich hosten und keine echten oder vertraulichen Daten eingeben.</p>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="intro-grid">
+      <article class="card">
+        <span class="number">01</span><h2>Reflected XSS</h2>
+        <p>Ein URL-Parameter wird direkt in die HTML-Antwort übernommen.</p>
+        <a class="text-link" href="/reflected?name=Max&mode=unsafe">Demo öffnen →</a>
+      </article>
+      <article class="card">
+        <span class="number">02</span><h2>Stored XSS</h2>
+        <p>Ein Kommentar wird gespeichert und beim Anzeigen unsicher als HTML interpretiert.</p>
+        <a class="text-link" href="#stored">Demo ansehen ↓</a>
+      </article>
+      <article class="card">
+        <span class="number">03</span><h2>DOM-based XSS</h2>
+        <p>Clientseitiges JavaScript übernimmt einen Wert aus dem URL-Fragment.</p>
+        <a class="text-link" href="#dom">Demo ansehen ↓</a>
+      </article>
+    </section>
+
+    <section class="panel" id="stored">
+      <div class="section-heading"><div><p class="eyebrow">DEMO 02</p><h2>Stored XSS – Kommentarfunktion</h2></div><span class="tag">Server-Speicherung</span></div>
+      <p>Kommentare werden im Backend gespeichert. Wähle, wie sie anschließend im Browser dargestellt werden.</p>
+      <label for="comment">Dein Kommentar</label>
+      <textarea id="comment" rows="3" maxlength="500" placeholder="Schreibe einen Kommentar …"></textarea>
+      <div class="actions">
+        <button id="add-comment">Kommentar speichern</button>
+        <button id="clear-comments" class="button secondary">Alle Kommentare löschen</button>
+      </div>
+      <div class="mode-row">
+        <span>Ausgabemethode:</span>
+        <label class="radio"><input type="radio" name="stored-mode" value="unsafe" checked> Unsicher (innerHTML)</label>
+        <label class="radio"><input type="radio" name="stored-mode" value="safe"> Sicher (textContent)</label>
+      </div>
+      <div id="comments" class="comments" aria-live="polite"></div>
+      <p class="muted">Testidee: Speichere <code>&lt;img src=x onerror=alert('Stored XSS')&gt;</code> und lade die Seite neu. Wechsle danach auf die sichere Ausgabemethode.</p>
+    </section>
+
+    <section class="panel" id="dom">
+      <div class="section-heading"><div><p class="eyebrow">DEMO 03</p><h2>DOM-based XSS – URL-Fragment</h2></div><span class="tag">Clientseitig</span></div>
+      <p>Das Skript liest den Teil der URL nach <code>#</code> und schreibt ihn in die Vorschau.</p>
+      <div class="actions">
+        <button id="dom-unsafe">Unsicheres Beispiel laden</button>
+        <button id="dom-safe" class="button secondary">Sicheres Beispiel laden</button>
+      </div>
+      <div class="mode-row"><span>Aktueller Modus:</span><strong id="dom-mode">Noch kein Beispiel geladen</strong></div>
+      <div id="dom-output" class="output-box">Hier erscheint die Vorschau.</div>
+      <p class="muted">Test-Payload: <code>&lt;img src=x onerror=alert('DOM XSS')&gt;</code></p>
+    </section>
+
+    <section class="panel">
+      <p class="eyebrow">DIE WICHTIGSTEN LEARNINGS</p>
+      <h2>Validierung ist nicht dasselbe wie Output-Encoding</h2>
+      <ul class="takeaways">
+        <li><strong>Input-Validierung:</strong> Prüft, ob Daten den fachlichen Anforderungen entsprechen, z. B. maximale Länge.</li>
+        <li><strong>Output-Encoding:</strong> Stellt Daten passend zum Ausgabekontext dar, damit Sonderzeichen nicht als HTML-Struktur interpretiert werden.</li>
+        <li><strong>Sichere DOM-API:</strong> Für reinen Text ist <code>textContent</code> meist die richtige Wahl statt <code>innerHTML</code>.</li>
+      </ul>
+    </section>
+
+    <footer>Lokales Lernprojekt · XSS Demo-Projekt · Keine produktive Anwendung · Erstellt mit Unterstützung von KI (GPT-6)</footer>
+  </main>
+</body>
+</html>
