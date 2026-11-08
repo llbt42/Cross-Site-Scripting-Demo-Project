@@ -9,7 +9,7 @@
 </head>
 <body>
 <main class="container">
-    <a class="back" href="/">← Zurück zum Playground</a>
+    <a class="back" href="/">← Zurück zur Hauptseite</a>
 
     <section class="panel">
         <div class="section-heading">
@@ -17,7 +17,6 @@
                 <p class="eyebrow">DEMO 02</p>
                 <h1>Stored XSS – Kommentarfunktion</h1>
             </div>
-            <span class="tag">Server-Speicherung</span>
         </div>
 
         <p>
@@ -57,10 +56,23 @@
         <div id="comments" class="comments" aria-live="polite"></div>
 
         <p class="muted">
-            Testidee:
-            Speichere
-            <code>&lt;img src=x onerror=alert('Stored XSS')&gt;</code>
-            und vergleiche anschließend beide Ausgabemethoden.
+            Testidee:<br>
+            Schreibe einen Kommentar mit diesem Inhalt:
+        </p>
+
+        <pre><code>&lt;div style="position:fixed;inset:0;background:#450a0a;color:white;z-index:99999;display:grid;place-content:center;text-align:center;padding:30px"&gt;
+  &lt;h1&gt;⚠️ SYSTEMWARNUNG&lt;/h1&gt;
+  &lt;h2&gt;Dein Browser ist gefährdet!&lt;/h2&gt;
+  &lt;p&gt;Ein verdächtiger Vorgang wurde erkannt.&lt;/p&gt;
+  &lt;button onclick="this.parentElement.parentElement.remove()"&gt;
+    Meldung schließen
+  &lt;/button&gt;
+  &lt;p&gt;Simulation einer Stored-XSS-Attacke&lt;/p&gt;
+&lt;/div&gt;</code></pre>
+
+        <p class="muted">
+            Vergleiche anschließend beide Ausgabemethoden:
+            <code>innerHTML</code> und <code>textContent</code>.
         </p>
     </section>
 

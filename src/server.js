@@ -41,7 +41,6 @@ async function serveStatic(pathname, res) {
         "/index.html": "index.html",
         "/style.css": "style.css",
         "/app.js": "app.js",
-        "/pages/reflected.html": "pages/reflected.html",
         "/pages/stored.html": "pages/stored.html",
         "/pages/dom.html": "pages/dom.html",
     };
@@ -65,11 +64,7 @@ async function serveReflected(url, res) {
         ? "safe"
         : "unsafe";
 
-    const template = await fs.readFile(
-        path.join(PUBLIC_DIR, "pages", "reflected.html"),
-        "utf8"
-    );
-
+    // Sichere oder unsichere Ausgabe auswählen
     const output = mode === "safe"
         ? escapeHtml(name)
         : name;
@@ -79,13 +74,23 @@ async function serveReflected(url, res) {
         : "Unsichere Variante: Der Parameter wird ungeprüft in HTML eingesetzt.";
 
     const result = `
-        <h2>Hallo, ${output}!</h2>
-        <p class="notice ${mode === "safe" ? "good" : "bad"}">
-            ${warning}
-        </p>
-    `;
+    <h2>Hallo, ${output}!</h2>
+    <p class="${mode === "safe" ? "good" : "bad"}">
+      ${warning}
+    </p>
+  `;
 
-    const html = template.replace("{{RESULT}}", result);
+    // HTML-Vorlage einlesen
+    const filePath = path.join(
+        PUBLIC_DIR,
+        "pages",
+        "reflected.html"
+    );
+
+    let html = await fs.readFile(filePath, "utf8");
+
+    // Platzhalter ersetzen
+    html = html.replace("{{RESULT}}", () => result);
 
     send(res, 200, html);
 }
@@ -94,12 +99,12 @@ const server = http.createServer(async (req, res) => {
     try {
         const url = new URL(req.url, `http://${req.headers.host || "localhost"}`);
 
-        if (req.method === "GET" && await serveStatic(url.pathname, res)) return;
-
         if (req.method === "GET" && url.pathname === "/pages/reflected.html") {
             await serveReflected(url, res);
             return;
         }
+
+        if (req.method === "GET" && await serveStatic(url.pathname, res)) return;
 
         if (req.method === "GET" && url.pathname === "/api/comments") {
             const comments = await readComments();
