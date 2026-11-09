@@ -48,17 +48,29 @@
         </div>
 
         <p class="muted">
-            Test-Payload:
-            <code>&lt;img src=x onerror=alert('DOM XSS')&gt;</code>
+            Test-Payload in der URL:
         </p>
+        <pre><code>&lt;div style="..."&gt;
+    &lt;h2 style="..."&gt;⚠️ SICHERHEITSWARNUNG&lt;/h2&gt;
+    &lt;p style="..."&gt;Deine Sitzung ist abgelaufen!&lt;/p&gt;
+    &lt;p&gt;Bitte bestätige deine Identität, um fortzufahren.&lt;/p&gt;
+    &lt;button
+        onclick="alert('Simulierte DOM-XSS-Attacke!')"
+        style="..."
+    &gt;
+        Sitzung wiederherstellen
+    &lt;/button&gt;
+&lt;/div&gt;
+</code></pre>
     </section>
 
     <section class="panel">
         <h2>Wie funktioniert die sichere Variante?</h2>
         <p>
-            Statt <code>innerHTML</code> wird <code>textContent</code>
-            verwendet. Dadurch behandelt der Browser den Inhalt
-            als Text und nicht als HTML-Struktur.
+            Bei <code>innerHTML</code> interpretiert der Browser übergebene Inhalte als HTML-Code.
+            So kann es dazu kommen, dass eingeschleuste HTML-Tags und Event-Handler ausgeführt werden.
+            Wird stattdessen <code>textContent</code> verwendet, behandelt der Browser die Inhalte als reinen Text.
+            So wird verhindert, dass es zur Ausführung kommt.
         </p>
     </section>
 

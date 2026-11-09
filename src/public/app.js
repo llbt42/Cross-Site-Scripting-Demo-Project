@@ -92,23 +92,73 @@ if (commentsContainer) {
 // DEMO 03 – DOM-BASED XSS
 // ==========================================
 
+const domPayload = "\n" +
+    "<div style=\"\n" +
+    "    position: relative;\n" +
+    "    background: #450a0a;\n" +
+    "    color: white;\n" +
+    "    border: 3px solid #dc2626;\n" +
+    "    border-radius: 14px;\n" +
+    "    padding: 30px;\n" +
+    "    margin: 20px 0;\n" +
+    "    text-align: center;\n" +
+    "    box-shadow: 0 0 30px rgba(220, 38, 38, 0.5);\n" +
+    "\">\n" +
+    "    <h2 style=\"color: #fecaca; font-size: 28px;\">\n" +
+    "        ⚠️ SICHERHEITSWARNUNG\n" +
+    "    </h2>\n" +
+    "\n" +
+    "    <p style=\"font-size: 18px;\">\n" +
+    "        Deine Sitzung ist abgelaufen!\n" +
+    "    </p>\n" +
+    "\n" +
+    "    <p>\n" +
+    "        Bitte bestätige deine Identität, um fortzufahren.\n" +
+    "    </p>\n" +
+    "\n" +
+    "    <button\n" +
+    "        onclick=\"alert('Simulierte DOM-XSS-Attacke!')\"\n" +
+    "        style=\"\n" +
+    "            background: #dc2626;\n" +
+    "            color: white;\n" +
+    "            border: none;\n" +
+    "            border-radius: 8px;\n" +
+    "            padding: 14px 24px;\n" +
+    "            font-size: 16px;\n" +
+    "            font-weight: bold;\n" +
+    "            cursor: pointer;\n" +
+    "        \"\n" +
+    "    >\n" +
+    "        Sitzung wiederherstellen\n" +
+    "    </button>\n" +
+    "\n" +
+    "</div>\n";
+
 const domOutput = document.querySelector("#dom-output");
 const domMode = document.querySelector("#dom-mode");
-
-const domPayload = "<img src=x onerror=alert('DOM XSS')>";
 
 function renderDomDemo(mode) {
   const value = decodeURIComponent(location.hash.slice(1));
 
   if (mode === "unsafe") {
-    // INTENTIONALLY VULNERABLE
-    domOutput.innerHTML = value || "Kein URL-Wert vorhanden.";
+    domOutput.innerHTML = value || "Keine Meldung vorhanden.";
     domMode.textContent = "Unsicher – innerHTML";
   } else {
-    // SAFE FOR PLAIN TEXT
-    domOutput.textContent = value || "Kein URL-Wert vorhanden.";
+    domOutput.textContent = value || "Keine Meldung vorhanden.";
     domMode.textContent = "Sicher – textContent";
   }
+}
+
+if (domOutput && domMode) {
+  document.querySelector("#dom-unsafe")?.addEventListener("click", () => {
+    renderDomDemo("unsafe");
+  });
+
+  document.querySelector("#dom-safe")?.addEventListener("click", () => {
+    renderDomDemo("safe");
+  });
+
+  renderDomDemo("unsafe");
 }
 
 // Nur auf der DOM-XSS-Seite ausführen
